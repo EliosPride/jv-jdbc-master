@@ -4,15 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Injector {
     private static final Map<String, Injector> injectors = new HashMap<>();
-    private final List<Class<?>> classes = new ArrayList<>();
+    private static final List<Class<?>> classes = new ArrayList<>();
 
     private Injector(String mainPackageName) {
         try {
