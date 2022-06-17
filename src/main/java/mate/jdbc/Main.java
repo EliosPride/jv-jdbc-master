@@ -1,30 +1,27 @@
 package mate.jdbc;
 
-import mate.jdbc.dao.impl.CarDaoImpl;
+import mate.jdbc.dao.impl.DriverDaoImpl;
 import mate.jdbc.lib.Injector;
-import mate.jdbc.model.Car;
+import mate.jdbc.model.Driver;
 
 public class Main {
     private static final Injector injector = Injector.getInstance("mate.jdbc");
 
     public static void main(String[] args) {
-//        ManufacturerDao manufacturerDao = (ManufacturerDao) injector.getInstance(ManufacturerDao.class);
-//        Manufacturer manufacturer = new Manufacturer();
-//        manufacturer.setName("Kostik");
-//        manufacturer.setCountry("Trinidad");
-//        manufacturer.setId(7L);
-//
-//        System.out.println(manufacturerDao.getAll());
-//
-//        System.out.println(manufacturerDao.create(manufacturer));
-//
-//        System.out.println(manufacturerDao.delete(6L));
-//
-//        System.out.println(manufacturerDao.update(manufacturer));
-//
-//        System.out.println(manufacturerDao.get(7L));
+        DriverDaoImpl dao = new DriverDaoImpl();
+        Driver driver = new Driver();
+        driver.setFirstName("Anton");
+        driver.setLastName("Babak");
+        driver.setCarId(3L);
 
-        CarDaoImpl carDao = new CarDaoImpl();
-        System.out.println(carDao.get(1L));
+        System.out.println(dao.getAll());
+        System.out.println(dao.create(driver));
+        System.out.println(driver.getId());
+        System.out.println(dao.get(3L));
+        driver.setFirstName("Bohdan");
+        System.out.println(dao.update(driver));
+        System.out.println(dao.delete(4L));
+        System.out.println(dao.getByCarId(3L));
+        System.out.println(dao.getAll());
     }
 }
