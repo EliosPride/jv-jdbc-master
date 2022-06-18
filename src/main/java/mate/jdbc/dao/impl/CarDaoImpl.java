@@ -2,6 +2,7 @@ package mate.jdbc.dao.impl;
 
 import mate.jdbc.dao.CarDao;
 import mate.jdbc.exception.DataProcessingException;
+import mate.jdbc.lib.Dao;
 import mate.jdbc.model.Car;
 import mate.jdbc.util.ConnectionUtil;
 
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Dao
 public class CarDaoImpl implements CarDao {
     private static final String GET_ALL_QUERY = "SELECT * FROM car WHERE is_deleted = false";
     private static final String CREATE_QUERY = "INSERT INTO car(model, year) values(?, ?)";
@@ -24,10 +26,8 @@ public class CarDaoImpl implements CarDao {
              Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(GET_ALL_QUERY);
             while (resultSet.next()) {
-                Long id = resultSet.getLong("id");
-                String model = resultSet.getString("model");
-                Integer year = resultSet.getInt("year");
-                cars.add(new Car(id, model, year));
+
+                cars.add(parseCar(resultSet));
             }
         } catch (SQLException e) {
             throw new DataProcessingException("can't get all cars from db", e);
@@ -44,8 +44,7 @@ public class CarDaoImpl implements CarDao {
             ps.executeUpdate();
             ResultSet resultSet = ps.getGeneratedKeys();
             if (resultSet.next()) {
-                Long id = resultSet.getLong(1);
-                car.setId(id);
+                car.setId(resultSet.getLong(1));
             }
         } catch (SQLException e) {
             throw new DataProcessingException("can't create car in db", e);

@@ -2,6 +2,7 @@ package mate.jdbc.dao.impl;
 
 import mate.jdbc.dao.DriverDao;
 import mate.jdbc.exception.DataProcessingException;
+import mate.jdbc.lib.Dao;
 import mate.jdbc.model.Driver;
 import mate.jdbc.util.ConnectionUtil;
 
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Dao
 public class DriverDaoImpl implements DriverDao {
     private static final String GET_ALL_QUERY = "SELECT * FROM driver WHERE is_deleted = false";
     private static final String CREATE_QUERY = "INSERT INTO driver(first_name, last_name, car_id) values(?, ?, ?)";
@@ -25,11 +27,7 @@ public class DriverDaoImpl implements DriverDao {
              Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(GET_ALL_QUERY);
             while (resultSet.next()) {
-                Long id = resultSet.getLong("id");
-                String firstName = resultSet.getString("first_name");
-                String lastName = resultSet.getString("last_name");
-                Long carId = resultSet.getLong("car_id");
-                drivers.add(new Driver(id, firstName, lastName, carId));
+                drivers.add(parseDriver(resultSet));
             }
         } catch (SQLException e) {
             throw new DataProcessingException("can't get all drivers from db", e);
@@ -47,8 +45,7 @@ public class DriverDaoImpl implements DriverDao {
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
-                Long id = resultSet.getLong(1);
-                driver.setId(id);
+                driver.setId(resultSet.getLong(1));
             }
         } catch (SQLException e) {
             throw new DataProcessingException("can't create driver in db", e);
