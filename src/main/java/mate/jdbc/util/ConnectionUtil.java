@@ -21,11 +21,12 @@ public class ConnectionUtil {
     }
 
     public static Connection getConnection() {
-        File file = new File("src/main/resources/data.properties");
+        File file = new File("src/main/resources/database.properties");
         try {
             Properties dbProperties = new Properties();
             dbProperties.load(new FileReader(file));
-            return DriverManager.getConnection("jdbc:mysql://localhost:3306/taxi_service", dbProperties);
+            String host = dbProperties.getProperty("host");
+            return DriverManager.getConnection(host, dbProperties);
         } catch (SQLException | IOException e) {
             throw new DataProcessingException("Can't create connection to DB", e);
         }
