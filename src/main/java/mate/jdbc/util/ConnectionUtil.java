@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class ConnectionUtil {
-    private static final String PATH_NAME = "src/main/resources/database.properties";
+    private static final String PATH_NAME = "D:\\jv-jdbc-master\\src\\main\\resources\\database.properties";
     static {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
