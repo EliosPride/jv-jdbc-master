@@ -14,9 +14,11 @@ import java.util.Optional;
 @Dao
 public class DriverDaoImpl implements DriverDao {
     private static final String GET_ALL_QUERY = "SELECT * FROM driver WHERE is_deleted = false";
-    private static final String CREATE_QUERY = "INSERT INTO driver(first_name, last_name, car_id) values(?, ?, ?)";
+    private static final String CREATE_QUERY =
+            "INSERT INTO driver(first_name, last_name, car_id, login, password) values(?, ?, ?, ?, ?)";
     private static final String GET_BY_ID_QUERY = "SELECT * FROM driver WHERE id = ? AND is_deleted = false";
-    private static final String UPDATE_QUERY = "UPDATE driver SET first_name = ?, last_name = ?, car_id = ? WHERE id = ?";
+    private static final String UPDATE_QUERY =
+            "UPDATE driver SET first_name = ?, last_name = ?, car_id = ?, login = ?, password = ? WHERE id = ?";
     private static final String DELETE_QUERY = "UPDATE driver SET is_deleted = true WHERE id = ?";
     private static final String GET_BY_CAR_ID_QUERY = "SELECT * FROM driver WHERE car_id = ? AND is_deleted = false";
 
@@ -41,7 +43,9 @@ public class DriverDaoImpl implements DriverDao {
              PreparedStatement preparedStatement = connection.prepareStatement(CREATE_QUERY, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, driver.getFirstName());
             preparedStatement.setString(2, driver.getLastName());
-            preparedStatement.setLong(3, driver.getCarId());
+            preparedStatement.setObject(3, driver.getCarId());
+            preparedStatement.setString(4, driver.getLogin());
+            preparedStatement.setString(5, driver.getPassword());
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
@@ -75,7 +79,9 @@ public class DriverDaoImpl implements DriverDao {
             preparedStatement.setString(1, driver.getFirstName());
             preparedStatement.setString(2, driver.getLastName());
             preparedStatement.setLong(3, driver.getCarId());
-            preparedStatement.setLong(4, driver.getId());
+            preparedStatement.setString(4, driver.getLogin());
+            preparedStatement.setString(5, driver.getPassword());
+            preparedStatement.setLong(6, driver.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new DataProcessingException("can't update driver in db", e);
@@ -116,6 +122,8 @@ public class DriverDaoImpl implements DriverDao {
         driver.setFirstName(resultSet.getString("first_name"));
         driver.setLastName(resultSet.getString("last_name"));
         driver.setCarId(resultSet.getLong("car_id"));
+        driver.setLogin(resultSet.getString("login"));
+        driver.setPassword(resultSet.getString("password"));
         return driver;
     }
 }

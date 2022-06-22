@@ -1,9 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>Driver-registration</title>
 </head>
 <body>
-<button><a href ="/drivers">Drivers</a></button>
+<button><a href ="/register">Driver-Registration</a></button>
 </body>
 </html>
