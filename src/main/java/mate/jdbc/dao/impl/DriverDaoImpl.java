@@ -21,6 +21,7 @@ public class DriverDaoImpl implements DriverDao {
             "UPDATE driver SET first_name = ?, last_name = ?, car_id = ?, login = ?, password = ? WHERE id = ?";
     private static final String DELETE_QUERY = "UPDATE driver SET is_deleted = true WHERE id = ?";
     private static final String GET_BY_CAR_ID_QUERY = "SELECT * FROM driver WHERE car_id = ? AND is_deleted = false";
+    private static final String GET_BY_LOGIN_QUERY = "SELECT * FROM driver WHERE login = ? AND is_deleted = false";
 
     @Override
     public List<Driver> getAll() {
@@ -114,6 +115,21 @@ public class DriverDaoImpl implements DriverDao {
             throw new DataProcessingException("can't get driver from db by carId", e);
         }
         return drivers;
+    }
+
+    @Override
+    public Optional<Driver> getByLogin(String login) {
+        try (Connection connection = ConnectionUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_LOGIN_QUERY)) {
+            preparedStatement.setString(1, login);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return Optional.of(parseDriver(resultSet));
+            }
+        } catch (SQLException e) {
+            throw new DataProcessingException("can't get driver from db by login", e);
+        }
+        return Optional.empty();
     }
 
     private Driver parseDriver(ResultSet resultSet) throws SQLException {

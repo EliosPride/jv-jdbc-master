@@ -14,13 +14,15 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.Objects;
 
+import static mate.jdbc.util.Constants.DRIVER_ID;
+
 @WebServlet("/register")
 public class RegistrationController extends HttpServlet {
     private final DriverDao driverDao = (DriverDao) InjectorUtils.getInstance(DriverDao.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("driver-registration.jsp");
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("driverRegistration.jsp");
         requestDispatcher.forward(req, resp);
     }
 
@@ -31,10 +33,10 @@ public class RegistrationController extends HttpServlet {
         String lastName = req.getParameter("last_name");
         String password = req.getParameter("password");
         String confirmPassword = req.getParameter("confirm");
-        Driver driver = new Driver(firstName, lastName, login, password);
         if (password.equals(confirmPassword) && !isEmpty(login, firstName, lastName, password)) {
+            Driver driver = new Driver(firstName, lastName, login, password);
             driverDao.create(driver);
-            resp.sendRedirect("/driver");
+            resp.sendRedirect("/car/add?" + DRIVER_ID + "=" + driver.getId());
         } else {
             String error = "Different passwords".toUpperCase(Locale.ROOT);
             if (isEmpty(login, firstName, lastName, password)) {
@@ -44,7 +46,7 @@ public class RegistrationController extends HttpServlet {
             req.setAttribute("save_login", login);
             req.setAttribute("save_firstName", firstName);
             req.setAttribute("save_lastName", lastName);
-            req.getRequestDispatcher("driver-registration.jsp").forward(req, resp);
+            req.getRequestDispatcher("driverRegistration.jsp").forward(req, resp);
         }
     }
 

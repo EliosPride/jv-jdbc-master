@@ -12,4 +12,5 @@ public interface DriverDao {
     Driver update(Driver driver);
     boolean delete(Long id);
     List<Driver> getByCarId(Long carId);
+    Optional<Driver> getByLogin(String login);
 }
