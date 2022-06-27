@@ -3,10 +3,10 @@ package mate.jdbc.factory;
 import mate.jdbc.service.CarService;
 import mate.jdbc.service.impl.CarServiceImpl;
 
-public class FactorySingleton {
+public class CarServiceFactory {
     private static CarService carService;
 
-    public static CarService getCarService() {
+    public static CarService getInstance() {
         if (carService == null) {
             return new CarServiceImpl();
         }

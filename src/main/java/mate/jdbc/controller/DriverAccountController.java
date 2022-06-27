@@ -5,10 +5,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import mate.jdbc.factory.FactorySingleton;
-import mate.jdbc.dao.CarDao;
+import mate.jdbc.factory.CarServiceFactory;
 import mate.jdbc.service.CarService;
-import mate.jdbc.util.InjectorUtils;
 
 import java.io.IOException;
 
@@ -17,7 +15,7 @@ import static mate.jdbc.util.Constants.DRIVER_ID;
 
 @WebServlet("/driver-account")
 public class DriverAccountController extends HttpServlet {
-    private final CarService carService = FactorySingleton.getCarService();
+    private final CarService carService = CarServiceFactory.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

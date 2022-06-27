@@ -5,8 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import mate.jdbc.factory.FactorySingleton;
-import mate.jdbc.dao.CarDao;
+import mate.jdbc.factory.CarServiceFactory;
 import mate.jdbc.dao.DriverDao;
 import mate.jdbc.model.Driver;
 import mate.jdbc.service.CarService;
@@ -20,7 +19,7 @@ import static mate.jdbc.util.Constants.DRIVER_ID;
 @WebServlet("/car/add")
 public class CarAddController extends HttpServlet {
     private final DriverDao driverDao = (DriverDao) InjectorUtils.getInstance(DriverDao.class);
-    private final CarService carService = FactorySingleton.getCarService();
+    private final CarService carService = CarServiceFactory.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
