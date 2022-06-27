@@ -1,16 +1,15 @@
 package mate.jdbc.service.impl;
 
-import mate.jdbc.Factory.FactorySingleton;
 import mate.jdbc.dao.CarDao;
-import mate.jdbc.dao.impl.CarDaoImpl;
 import mate.jdbc.model.Car;
 import mate.jdbc.service.CarService;
+import mate.jdbc.util.InjectorUtils;
 
 import java.util.List;
 import java.util.Optional;
 
 public class CarServiceImpl implements CarService {
-    CarDao carDao = new CarDaoImpl();
+    private final CarDao carDao = (CarDao) InjectorUtils.getInstance(CarDao.class);
 
     @Override
     public List<Car> getAll() {

@@ -1,4 +1,4 @@
-package mate.jdbc.Factory;
+package mate.jdbc.factory;
 
 import mate.jdbc.service.CarService;
 import mate.jdbc.service.impl.CarServiceImpl;

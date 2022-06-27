@@ -5,7 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import mate.jdbc.Factory.FactorySingleton;
+import mate.jdbc.factory.FactorySingleton;
 import mate.jdbc.dao.CarDao;
 import mate.jdbc.service.CarService;
 import mate.jdbc.util.InjectorUtils;
@@ -17,7 +17,6 @@ import static mate.jdbc.util.Constants.DRIVER_ID;
 
 @WebServlet("/driver-account")
 public class DriverAccountController extends HttpServlet {
-    private final CarDao carDao = (CarDao) InjectorUtils.getInstance(CarDao.class);
     private final CarService carService = FactorySingleton.getCarService();
 
     @Override
