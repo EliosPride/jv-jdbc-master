@@ -5,8 +5,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import mate.jdbc.dao.CarDao;
-import mate.jdbc.util.InjectorUtils;
+import mate.jdbc.factory.CarServiceFactory;
+import mate.jdbc.service.CarService;
 
 import java.io.IOException;
 
@@ -15,12 +15,12 @@ import static mate.jdbc.util.Constants.DRIVER_ID;
 
 @WebServlet("/driver-account")
 public class DriverAccountController extends HttpServlet {
-    private final CarDao carDao = (CarDao) InjectorUtils.getInstance(CarDao.class);
+    private final CarService carService = CarServiceFactory.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Long carId = Long.valueOf(req.getParameter(CAR_ID));
-        req.setAttribute("driversCar", carDao.get(carId).orElseThrow());
+        req.setAttribute("driversCar", carService.get(carId).orElseThrow());
         req.setAttribute(DRIVER_ID, req.getParameter(DRIVER_ID));
         req.getRequestDispatcher("driverAccount.jsp").forward(req, resp);
     }
