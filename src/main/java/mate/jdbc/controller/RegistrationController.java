@@ -7,7 +7,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import mate.jdbc.dao.DriverDao;
+import mate.jdbc.factory.DriverServiceFactory;
 import mate.jdbc.model.Driver;
+import mate.jdbc.service.DriverService;
 import mate.jdbc.util.InjectorUtils;
 
 import java.io.IOException;
@@ -18,7 +20,7 @@ import static mate.jdbc.util.Constants.DRIVER_ID;
 
 @WebServlet("/register")
 public class RegistrationController extends HttpServlet {
-    private final DriverDao driverDao = (DriverDao) InjectorUtils.getInstance(DriverDao.class);
+    private final DriverService driverService = DriverServiceFactory.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -35,7 +37,7 @@ public class RegistrationController extends HttpServlet {
         String confirmPassword = req.getParameter("confirm");
         if (password.equals(confirmPassword) && !isEmpty(login, firstName, lastName, password)) {
             Driver driver = new Driver(firstName, lastName, login, password);
-            driverDao.create(driver);
+            driverService.create(driver);
             resp.sendRedirect("/car/add?" + DRIVER_ID + "=" + driver.getId());
         } else {
             String error = "Different passwords".toUpperCase(Locale.ROOT);
