@@ -10,8 +10,6 @@ import mate.jdbc.factory.DriverServiceFactory;
 import mate.jdbc.model.Driver;
 import mate.jdbc.service.DriverService;
 import mate.jdbc.util.HashUtils;
-import mate.jdbc.util.InjectorUtils;
-
 import java.io.IOException;
 import java.util.Optional;
 
