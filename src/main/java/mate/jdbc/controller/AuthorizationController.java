@@ -9,6 +9,7 @@ import mate.jdbc.dao.DriverDao;
 import mate.jdbc.factory.DriverServiceFactory;
 import mate.jdbc.model.Driver;
 import mate.jdbc.service.DriverService;
+import mate.jdbc.util.HashUtils;
 import mate.jdbc.util.InjectorUtils;
 
 import java.io.IOException;
@@ -25,8 +26,9 @@ public class AuthorizationController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
+        String encrypt = HashUtils.encrypt(password);
         Optional<Driver> driverOptional = driverService.getByLogin(login);
-        if (driverOptional.isPresent() && password.equals(driverOptional.get().getPassword())) {
+        if (driverOptional.isPresent() && encrypt.equals(driverOptional.get().getPassword())) {
             Driver driver = driverOptional.get();
             if (driver.getCarId() == 0) {
                 resp.sendRedirect("/car/add?" + DRIVER_ID + "=" + driver.getId());

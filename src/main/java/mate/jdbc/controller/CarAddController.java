@@ -20,8 +20,8 @@ import static mate.jdbc.util.Constants.DRIVER_ID;
 
 @WebServlet("/car/add")
 public class CarAddController extends HttpServlet {
-    private final CarService carService = CarServiceFactory.getInstance();
-    private final DriverService driverService = DriverServiceFactory.getInstance();
+    private static final CarService carService = CarServiceFactory.getInstance();
+    private static final DriverService driverService = DriverServiceFactory.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

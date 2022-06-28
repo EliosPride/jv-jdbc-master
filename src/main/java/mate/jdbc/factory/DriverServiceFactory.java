@@ -8,7 +8,7 @@ public class DriverServiceFactory {
 
     public static DriverService getInstance() {
         if (driverService == null) {
-            return new DriverServiceImpl();
+            driverService = new DriverServiceImpl();
         }
         return driverService;
     }
