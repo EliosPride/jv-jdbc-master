@@ -8,7 +8,7 @@ public class CarServiceFactory {
 
     public static CarService getInstance() {
         if (carService == null) {
-            return new CarServiceImpl();
+            carService = new CarServiceImpl();
         }
         return carService;
     }

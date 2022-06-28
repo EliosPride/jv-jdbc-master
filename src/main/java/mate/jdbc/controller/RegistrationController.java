@@ -7,12 +7,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import mate.jdbc.dao.DriverDao;
+import mate.jdbc.exception.DataProcessingException;
 import mate.jdbc.factory.DriverServiceFactory;
 import mate.jdbc.model.Driver;
 import mate.jdbc.service.DriverService;
+import mate.jdbc.util.HashUtils;
 import mate.jdbc.util.InjectorUtils;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -20,7 +24,7 @@ import static mate.jdbc.util.Constants.DRIVER_ID;
 
 @WebServlet("/register")
 public class RegistrationController extends HttpServlet {
-    private final DriverService driverService = DriverServiceFactory.getInstance();
+    private static final DriverService driverService = DriverServiceFactory.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -35,8 +39,9 @@ public class RegistrationController extends HttpServlet {
         String lastName = req.getParameter("last_name");
         String password = req.getParameter("password");
         String confirmPassword = req.getParameter("confirm");
+        String encrypt = HashUtils.encrypt(password);
         if (password.equals(confirmPassword) && !isEmpty(login, firstName, lastName, password)) {
-            Driver driver = new Driver(firstName, lastName, login, password);
+            Driver driver = new Driver(firstName, lastName, login, encrypt);
             driverService.create(driver);
             resp.sendRedirect("/car/add?" + DRIVER_ID + "=" + driver.getId());
         } else {
