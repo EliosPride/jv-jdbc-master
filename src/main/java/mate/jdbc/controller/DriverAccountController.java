@@ -10,16 +10,11 @@ import mate.jdbc.service.CarService;
 
 import java.io.IOException;
 
-import static mate.jdbc.util.Constants.CAR_ID;
-
 @WebServlet("/driver-account")
 public class DriverAccountController extends HttpServlet {
-    private static final CarService carService = CarServiceFactory.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Long carId = Long.valueOf(req.getParameter(CAR_ID));
-        req.setAttribute("driversCar", carService.get(carId).orElseThrow());
         req.getRequestDispatcher("driverAccount.jsp").forward(req, resp);
     }
 }

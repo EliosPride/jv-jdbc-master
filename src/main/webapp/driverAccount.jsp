@@ -1,5 +1,6 @@
 <%@ page import="mate.jdbc.model.Car" %>
 <%@ page import="java.io.PrintWriter" %>
+<%@ page import="static mate.jdbc.util.Constants.CAR" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -9,7 +10,7 @@
 <body>
 
 <%
-    Car car = (Car) request.getAttribute("driversCar");
+    Car car = (Car) request.getSession().getAttribute(CAR);
     PrintWriter printWriter = response.getWriter();
     printWriter.write("<table border=\"1\">");
     printWriter.write("<tr>");

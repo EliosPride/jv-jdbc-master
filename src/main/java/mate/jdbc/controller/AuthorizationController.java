@@ -6,8 +6,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import mate.jdbc.factory.CarServiceFactory;
 import mate.jdbc.factory.DriverServiceFactory;
+import mate.jdbc.model.Car;
 import mate.jdbc.model.Driver;
+import mate.jdbc.service.CarService;
 import mate.jdbc.service.DriverService;
 import mate.jdbc.util.HashUtils;
 
@@ -19,6 +22,7 @@ import static mate.jdbc.util.Constants.*;
 @WebServlet("/authorization")
 public class AuthorizationController extends HttpServlet {
     private static final DriverService driverService = DriverServiceFactory.getInstance();
+    private static final CarService carService = CarServiceFactory.getInstance();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -33,7 +37,9 @@ public class AuthorizationController extends HttpServlet {
             if (driver.getCarId() == 0) {
                 resp.sendRedirect("/car/add");
             } else {
-                resp.sendRedirect("/driver-account?" + CAR_ID + "=" + driver.getCarId());
+                Car car = carService.get(driver.getCarId()).orElseThrow();
+                session.setAttribute(CAR, car);
+                resp.sendRedirect("/driver-account");
             }
         } else {
             req.setAttribute("wrongData", "incorrect login or password");
