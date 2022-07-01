@@ -5,16 +5,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import mate.jdbc.factory.CarServiceFactory;
-import mate.jdbc.service.CarService;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebServlet("/driver-account")
-public class DriverAccountController extends HttpServlet {
+@WebServlet("/logout")
+public class LogoutController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("driverAccount.jsp").forward(req, resp);
+        HttpSession session = req.getSession();
+        session.invalidate();
+        resp.sendRedirect("/");
     }
 }
