@@ -10,6 +10,7 @@ import mate.jdbc.dao.DriverDao;
 import mate.jdbc.exception.DataProcessingException;
 import mate.jdbc.factory.DriverServiceFactory;
 import mate.jdbc.model.Driver;
+import mate.jdbc.model.Role;
 import mate.jdbc.service.DriverService;
 import mate.jdbc.util.HashUtils;
 import mate.jdbc.util.InjectorUtils;
@@ -40,10 +41,20 @@ public class RegistrationController extends HttpServlet {
         String password = req.getParameter("password");
         String confirmPassword = req.getParameter("confirm");
         String encrypt = HashUtils.encrypt(password);
+        String user = Role.USER.toString();
+        String admin = Role.ADMIN.toString();
         if (password.equals(confirmPassword) && !isEmpty(login, firstName, lastName, password)) {
-            Driver driver = new Driver(firstName, lastName, login, encrypt);
-            driverService.create(driver);
-            resp.sendRedirect("/car/add?" + DRIVER_ID + "=" + driver.getId());
+            if (req.getParameter("button").equals(user)) {
+                Driver driver = new Driver(firstName, lastName, login, encrypt);
+                driver.setRole(user);
+                driverService.create(driver);
+                resp.sendRedirect("/car/add?" + DRIVER_ID + "=" + driver.getId());
+            } else {
+                Driver driver = new Driver(firstName, lastName, login, encrypt);
+                driver.setRole(admin);
+                driverService.create(driver);
+                resp.sendRedirect("/admin-controller");
+            }
         } else {
             String error = "Different passwords".toUpperCase(Locale.ROOT);
             if (isEmpty(login, firstName, lastName, password)) {
