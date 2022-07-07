@@ -9,6 +9,15 @@ public class Driver {
     private Long carId;
     private String login;
     private String password;
+    private Role role;
+
+    public Driver(String firstName, String lastName, String login, String password, Role role) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.login = login;
+        this.password = password;
+        this.role = role;
+    }
 
     public Driver(Long id, String firstName, String lastName, Long carId, String login, String password) {
         this.id = id;
@@ -84,17 +93,25 @@ public class Driver {
         this.password = password;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Driver driver = (Driver) o;
-        return Objects.equals(id, driver.id) && Objects.equals(firstName, driver.firstName) && Objects.equals(lastName, driver.lastName) && Objects.equals(carId, driver.carId) && Objects.equals(login, driver.login) && Objects.equals(password, driver.password);
+        return Objects.equals(id, driver.id) && Objects.equals(firstName, driver.firstName) && Objects.equals(lastName, driver.lastName) && Objects.equals(carId, driver.carId) && Objects.equals(login, driver.login) && Objects.equals(password, driver.password) && role == driver.role;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, carId, login, password);
+        return Objects.hash(id, firstName, lastName, carId, login, password, role);
     }
 
     @Override
@@ -106,6 +123,7 @@ public class Driver {
                 ", carId=" + carId +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
+                ", role=" + role +
                 '}';
     }
 }

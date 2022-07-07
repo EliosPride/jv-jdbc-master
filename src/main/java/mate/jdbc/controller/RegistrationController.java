@@ -6,20 +6,18 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import mate.jdbc.dao.DriverDao;
-import mate.jdbc.exception.DataProcessingException;
+import jakarta.servlet.http.HttpSession;
 import mate.jdbc.factory.DriverServiceFactory;
 import mate.jdbc.model.Driver;
+import mate.jdbc.model.Role;
 import mate.jdbc.service.DriverService;
 import mate.jdbc.util.HashUtils;
-import mate.jdbc.util.InjectorUtils;
 
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
 import java.util.Objects;
 
+import static mate.jdbc.util.Constants.DRIVER;
 import static mate.jdbc.util.Constants.DRIVER_ID;
 
 @WebServlet("/register")
@@ -40,10 +38,19 @@ public class RegistrationController extends HttpServlet {
         String password = req.getParameter("password");
         String confirmPassword = req.getParameter("confirm");
         String encrypt = HashUtils.encrypt(password);
+        Role role = Role.valueOf(req.getParameter("button"));
         if (password.equals(confirmPassword) && !isEmpty(login, firstName, lastName, password)) {
-            Driver driver = new Driver(firstName, lastName, login, encrypt);
+            Driver driver = new Driver(firstName, lastName, login, encrypt, role);
             driverService.create(driver);
-            resp.sendRedirect("/car/add?" + DRIVER_ID + "=" + driver.getId());
+            if (driver.getRole().equals(Role.USER)) {
+                HttpSession session = req.getSession();
+                session.setAttribute(DRIVER, driver);
+                resp.sendRedirect("/car/add?" + DRIVER_ID + "=" + driver.getId());
+            } else {
+                HttpSession session = req.getSession();
+                session.setAttribute(DRIVER, driver);
+                resp.sendRedirect("/adminPage.jsp");
+            }
         } else {
             String error = "Different passwords".toUpperCase(Locale.ROOT);
             if (isEmpty(login, firstName, lastName, password)) {

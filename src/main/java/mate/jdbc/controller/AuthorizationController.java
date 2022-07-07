@@ -10,15 +10,17 @@ import mate.jdbc.factory.CarServiceFactory;
 import mate.jdbc.factory.DriverServiceFactory;
 import mate.jdbc.model.Car;
 import mate.jdbc.model.Driver;
+import mate.jdbc.model.Role;
 import mate.jdbc.service.CarService;
 import mate.jdbc.service.DriverService;
 import mate.jdbc.util.HashUtils;
 
-
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 
-import static mate.jdbc.util.Constants.*;
+import static mate.jdbc.util.Constants.CAR;
+import static mate.jdbc.util.Constants.DRIVER;
 
 @WebServlet("/authorization")
 public class AuthorizationController extends HttpServlet {
@@ -35,12 +37,16 @@ public class AuthorizationController extends HttpServlet {
         if (driverOptional.isPresent() && encrypt.equals(driverOptional.get().getPassword())) {
             Driver driver = driverOptional.get();
             session.setAttribute(DRIVER, driver);
-            if (driver.getCarId() == 0) {
-                resp.sendRedirect("/car/add");
+            if (Objects.equals(driver.getRole(), Role.ADMIN)) {
+                resp.sendRedirect("/admin");
             } else {
-                Car car = carService.get(driver.getCarId()).orElseThrow();
-                session.setAttribute(CAR, car);
-                resp.sendRedirect("/driver-account");
+                if (driver.getCarId() == 0) {
+                    resp.sendRedirect("/car/add");
+                } else {
+                    Car car = carService.get(driver.getCarId()).orElseThrow();
+                    session.setAttribute(CAR, car);
+                    resp.sendRedirect("/driver-account");
+                }
             }
         } else {
             req.setAttribute("wrongData", "incorrect login or password");
