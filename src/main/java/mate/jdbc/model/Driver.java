@@ -9,9 +9,9 @@ public class Driver {
     private Long carId;
     private String login;
     private String password;
-    private String role;
+    private Role role;
 
-    public Driver(String firstName, String lastName, String login, String password, String role) {
+    public Driver(String firstName, String lastName, String login, String password, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.login = login;
@@ -93,11 +93,11 @@ public class Driver {
         this.password = password;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
@@ -106,7 +106,7 @@ public class Driver {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Driver driver = (Driver) o;
-        return Objects.equals(id, driver.id) && Objects.equals(firstName, driver.firstName) && Objects.equals(lastName, driver.lastName) && Objects.equals(carId, driver.carId) && Objects.equals(login, driver.login) && Objects.equals(password, driver.password) && Objects.equals(role, driver.role);
+        return Objects.equals(id, driver.id) && Objects.equals(firstName, driver.firstName) && Objects.equals(lastName, driver.lastName) && Objects.equals(carId, driver.carId) && Objects.equals(login, driver.login) && Objects.equals(password, driver.password) && role == driver.role;
     }
 
     @Override
@@ -123,7 +123,7 @@ public class Driver {
                 ", carId=" + carId +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
-                ", role='" + role + '\'' +
+                ", role=" + role +
                 '}';
     }
 }

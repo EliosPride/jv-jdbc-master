@@ -16,6 +16,7 @@ import mate.jdbc.service.DriverService;
 import mate.jdbc.util.HashUtils;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 
 import static mate.jdbc.util.Constants.CAR;
@@ -36,8 +37,8 @@ public class AuthorizationController extends HttpServlet {
         if (driverOptional.isPresent() && encrypt.equals(driverOptional.get().getPassword())) {
             Driver driver = driverOptional.get();
             session.setAttribute(DRIVER, driver);
-            if (driver.getRole().equals(Role.ADMIN.name())) {
-                resp.sendRedirect("/admin-controller");
+            if (Objects.equals(driver.getRole(), Role.ADMIN)) {
+                resp.sendRedirect("/admin");
             } else {
                 if (driver.getCarId() == 0) {
                     resp.sendRedirect("/car/add");

@@ -6,21 +6,18 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import mate.jdbc.dao.DriverDao;
-import mate.jdbc.exception.DataProcessingException;
+import jakarta.servlet.http.HttpSession;
 import mate.jdbc.factory.DriverServiceFactory;
 import mate.jdbc.model.Driver;
 import mate.jdbc.model.Role;
 import mate.jdbc.service.DriverService;
 import mate.jdbc.util.HashUtils;
-import mate.jdbc.util.InjectorUtils;
 
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
 import java.util.Objects;
 
+import static mate.jdbc.util.Constants.DRIVER;
 import static mate.jdbc.util.Constants.DRIVER_ID;
 
 @WebServlet("/register")
@@ -41,19 +38,18 @@ public class RegistrationController extends HttpServlet {
         String password = req.getParameter("password");
         String confirmPassword = req.getParameter("confirm");
         String encrypt = HashUtils.encrypt(password);
-        String user = Role.USER.toString();
-        String admin = Role.ADMIN.toString();
+        Role role = Role.valueOf(req.getParameter("button"));
         if (password.equals(confirmPassword) && !isEmpty(login, firstName, lastName, password)) {
-            if (req.getParameter("button").equals(user)) {
-                Driver driver = new Driver(firstName, lastName, login, encrypt);
-                driver.setRole(user);
-                driverService.create(driver);
+            Driver driver = new Driver(firstName, lastName, login, encrypt, role);
+            driverService.create(driver);
+            if (driver.getRole().equals(Role.USER)) {
+                HttpSession session = req.getSession();
+                session.setAttribute(DRIVER, driver);
                 resp.sendRedirect("/car/add?" + DRIVER_ID + "=" + driver.getId());
             } else {
-                Driver driver = new Driver(firstName, lastName, login, encrypt);
-                driver.setRole(admin);
-                driverService.create(driver);
-                resp.sendRedirect("/admin-controller");
+                HttpSession session = req.getSession();
+                session.setAttribute(DRIVER, driver);
+                resp.sendRedirect("/adminPage.jsp");
             }
         } else {
             String error = "Different passwords".toUpperCase(Locale.ROOT);

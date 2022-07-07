@@ -4,11 +4,13 @@ import mate.jdbc.dao.DriverDao;
 import mate.jdbc.exception.DataProcessingException;
 import mate.jdbc.lib.Dao;
 import mate.jdbc.model.Driver;
+import mate.jdbc.model.Role;
 import mate.jdbc.util.ConnectionUtil;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Dao
@@ -47,7 +49,7 @@ public class DriverDaoImpl implements DriverDao {
             preparedStatement.setObject(3, driver.getCarId());
             preparedStatement.setString(4, driver.getLogin());
             preparedStatement.setString(5, driver.getPassword());
-            preparedStatement.setObject(6, driver.getRole());
+            preparedStatement.setString(6, String.valueOf(driver.getRole()));
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
@@ -83,7 +85,7 @@ public class DriverDaoImpl implements DriverDao {
             preparedStatement.setLong(3, driver.getCarId());
             preparedStatement.setString(4, driver.getLogin());
             preparedStatement.setString(5, driver.getPassword());
-            preparedStatement.setString(6, driver.getRole());
+            preparedStatement.setObject(6, driver.getRole());
             preparedStatement.setLong(7, driver.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -142,7 +144,7 @@ public class DriverDaoImpl implements DriverDao {
         driver.setCarId(resultSet.getLong("car_id"));
         driver.setLogin(resultSet.getString("login"));
         driver.setPassword(resultSet.getString("password"));
-        driver.setRole(resultSet.getString("role"));
+        driver.setRole(Role.valueOf(resultSet.getString("role").toUpperCase(Locale.ROOT)));
         return driver;
     }
 }

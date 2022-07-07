@@ -12,7 +12,7 @@ import java.io.IOException;
 
 import static mate.jdbc.util.Constants.DRIVER_ID;
 
-@WebServlet("/admin-controller")
+@WebServlet("/admin")
 public class AdminController extends HttpServlet {
     private static final DriverService driverService = DriverServiceFactory.getInstance();
 
@@ -26,6 +26,6 @@ public class AdminController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Long driverId = Long.valueOf(req.getParameter(DRIVER_ID));
         driverService.delete(driverId);
-        resp.sendRedirect("/admin-controller");
+        resp.sendRedirect("/admin");
     }
 }

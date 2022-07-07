@@ -11,8 +11,9 @@ import mate.jdbc.model.Role;
 import mate.jdbc.service.DriverService;
 
 import java.io.IOException;
+import java.util.Objects;
 
-@WebFilter(urlPatterns = {"/admin-controller"})
+@WebFilter(urlPatterns = {"/admin"})
 public class AdminFilter implements Filter {
     private static final DriverService driverService = DriverServiceFactory.getInstance();
 
@@ -26,10 +27,8 @@ public class AdminFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpSession session = httpServletRequest.getSession();
         Driver driver = (Driver) session.getAttribute("driver");
-        if (driver.getRole().equals(Role.ADMIN.name())) {
+        if (Objects.equals(driver.getRole(), Role.ADMIN)) {
             chain.doFilter(request, response);
-        } else {
-            ((HttpServletResponse) response).sendRedirect("/");
         }
     }
 

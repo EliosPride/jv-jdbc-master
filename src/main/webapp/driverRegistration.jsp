@@ -90,7 +90,7 @@
         </div>
 
         <div>
-            <button type="submit">Submit</button>
+            <button type="submit" name="typeChoose">Submit</button>
         </div>
     </form>
 

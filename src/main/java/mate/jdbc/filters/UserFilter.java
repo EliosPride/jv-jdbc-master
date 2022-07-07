@@ -9,6 +9,7 @@ import mate.jdbc.model.Driver;
 import mate.jdbc.model.Role;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @WebFilter(urlPatterns = {"/car/add", "/driver-account"})
 public class UserFilter implements Filter {
@@ -22,10 +23,8 @@ public class UserFilter implements Filter {
         HttpServletRequest servletRequest = (HttpServletRequest) request;
         HttpSession session = servletRequest.getSession();
         Driver driver = (Driver) session.getAttribute("driver");
-        if (driver.getRole().equals(Role.USER.name())) {
+        if (Objects.equals(driver.getRole(), Role.USER)) {
             chain.doFilter(request, response);
-        } else {
-            ((HttpServletResponse) response).sendRedirect("/");
         }
     }
 
